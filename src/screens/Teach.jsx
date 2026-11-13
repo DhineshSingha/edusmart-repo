@@ -666,6 +666,24 @@ function BrowseByUnit() {
           ============================================================ */}
       {browse === 'cards' ? (
         <div ref={pickerRef}>
+          {/* ---- THE FIRST TIER GETS ITS NAME TOO ----
+              CHALLENGES and OTHERS have always been labelled.
+              The four cards above them were not, which left the
+              row below looking like the only thing on the screen
+              that had been sorted into groups — and left the
+              cards themselves as an unnamed block that happened
+              to sit above two named ones.
+
+              Same type, same colour, same spacing as the two
+              labels underneath, because they are doing the same
+              job. A label that announced itself differently
+              would be claiming the cards are a different KIND of
+              thing from the chips, and they are not: all three
+              rows answer one question, which is what the teacher
+              is looking at. */}
+          <span className="mb-1.5 block text-[12px] font-medium uppercase tracking-wide text-ink-400">
+            Categories
+          </span>
           <CategoryCards
             activeId={activeId}
             setActiveId={choose}
