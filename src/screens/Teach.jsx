@@ -2571,17 +2571,48 @@ function AssignmentCard({
           different hue, higher saturation — so the one thing
           asking for her attention stays the one thing that
           catches it. */}
+      {/* ---- AND THEN IT WENT SOLID ----
+          The tint argued for above lost to the screen. Dhinesh's
+          word was "faded", and he is right that a 50-level fill
+          under 800-level text reads as a band that has been
+          turned down rather than one that was designed quiet.
+
+          The argument the tint rested on was that a filled indigo
+          row would look like a button and this was only a band.
+          That premise was wrong the whole time: it IS a button —
+          it opens the class list, it has a chevron, it has a
+          hover. A control styled to look less pressable than it
+          is was solving a problem it had invented.
+
+          Solid also settles the question the tint was fighting
+          over. On this tab Assign is deliberately NOT the primary
+          action, because the sending already happened and the
+          live question is who has it. A filled row above two
+          quiet buttons says exactly that, with no ambiguity about
+          which line the card is about.
+
+          WHITE AT TWO WEIGHTS. "Assigned to" is the frame and the
+          figures are the fact, which the tint carried in two
+          levels of indigo. On a solid fill that becomes full
+          white for the numbers and 75% for the words around
+          them — same two levels, same reading order.
+
+          The one thing to watch: "Needs action" is a pale amber
+          chip, and it now sits on saturated indigo instead of a
+          tint. That is a bigger contrast than before, which is
+          the right direction — the one row asking for her
+          attention should still be the one that catches it. */}
       <button
         type="button"
         onClick={onShowClasses}
-        className="mt-auto flex w-full flex-wrap items-center gap-2 rounded-control border border-brand-200 bg-brand-50 px-3 py-2 text-left transition-colors hover:border-brand-300 hover:bg-brand-100"
+        className="mt-auto flex w-full flex-wrap items-center gap-2 rounded-control border border-brand-600 bg-brand-600 px-3 py-2 text-left transition-colors hover:border-brand-700 hover:bg-brand-700"
       >
-        <span className="min-w-0 flex-1 truncate text-[13px] text-brand-800">
+        <span className="min-w-0 flex-1 truncate text-[13px] text-white/75">
           Assigned to{' '}
-          <span className="font-semibold text-brand-900">
+          <span className="font-semibold text-white">
             {a.classIds.length} {a.classIds.length === 1 ? 'class' : 'classes'}
           </span>{' '}
-          · <span className="font-semibold text-brand-900">{reach} students</span>
+          · <span className="font-semibold text-white">{reach} students</span>
         </span>
         {waiting > 0 && (
           <span
@@ -2594,7 +2625,7 @@ function AssignmentCard({
             </span>
           </span>
         )}
-        <ChevronRight className="h-4 w-4 shrink-0 text-brand-500" aria-hidden />
+        <ChevronRight className="h-4 w-4 shrink-0 text-white/70" aria-hidden />
       </button>
 
       {/* ---- ASSIGN · SHARE · MORE ----
