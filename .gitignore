@@ -1,0 +1,28 @@
+# Dependencies — restored by `npm install`, never committed.
+node_modules/
+
+# Build output. Netlify runs the build itself, so committing dist/
+# would mean two versions of the same thing in the repo, and the
+# stale one would be the one people read.
+dist/
+.vite/
+
+# Netlify's local state
+.netlify/
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local env overrides
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log

@@ -1,0 +1,45 @@
+# Netlify build settings for the EduSmart teacher-experience prototype.
+#
+# With this file in the repo root, Netlify needs no configuration in its
+# UI: connect the repository and it reads everything below. Settings
+# typed into the dashboard override this file, so if a deploy ever uses
+# the wrong command, check there first — a value set in two places is
+# the usual reason a build disagrees with its own config.
+
+[build]
+  # Vite writes the production build here.
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Pin the major version so a Netlify image upgrade cannot change the
+  # build out from under the project. Vite 7 needs Node 20 or newer.
+  NODE_VERSION = "22"
+
+# ---- The redirect, and why it is here even though nothing needs it yet ----
+# The prototype uses HashRouter, so every route lives after a "#" and the
+# server only ever sees "/" — no redirect is required today.
+#
+# It is here because the day someone switches to BrowserRouter, the app
+# breaks in a way that is hard to recognise: the first page load works,
+# and then a refresh on /classes/c1 returns Netlify's 404 because no such
+# file exists. The rule below hands every unmatched path to index.html
+# and lets the router decide, which is correct for both kinds of routing
+# and costs nothing while it is unused.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Hashed asset filenames change whenever their contents change, so they
+# can be cached hard. index.html must never be, or a visitor keeps being
+# served an old shell that points at assets which no longer exist.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

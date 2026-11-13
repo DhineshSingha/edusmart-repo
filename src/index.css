@@ -1,0 +1,689 @@
+@import "tailwindcss";
+
+/* ============================================================
+   EduSmart Design System
+   ------------------------------------------------------------
+   THIS IS THE MOST IMPORTANT FILE IN THE PROJECT.
+
+   Every colour, corner radius and shadow in the product is
+   named here. Screens never write a raw colour — they refer to
+   a name like `bg-brand-600`. So changing a value here changes
+   it everywhere at once, consistently.
+
+   That is the whole reason a design system exists.
+   ============================================================ */
+
+@theme {
+  /* ---------------------------------------------------------
+     TYPEFACE
+     Inter. One family, used at different weights and sizes.
+     Two typefaces in a data-heavy product is one too many.
+     --------------------------------------------------------- */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+
+  /* ---------------------------------------------------------
+     BRAND — indigo
+     ---------------------------------------------------------
+     Chosen by Dhinesh after comparing four palettes on the real
+     screens rather than on swatches. Replaces the live
+     product's navy-and-orange.
+
+     Two properties make it work beyond taste:
+
+     1. It sits far from red, amber and green on the colour
+        wheel, so "this is a button" never gets confused with
+        "this student is failing". In the live product orange
+        means both, which is why nothing on those screens has
+        priority.
+     2. It passes WCAG AA twice over — at 600 carrying white
+        text, and at 700 as text on white. Both are used
+        throughout this product, and public-school procurement
+        will check.
+
+     RULE: brand colour marks things you can ACT on. Nothing
+     else. If it isn't clickable, it isn't indigo.
+     --------------------------------------------------------- */
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
+
+  /* ---------------------------------------------------------
+     INK — warm neutrals
+     ---------------------------------------------------------
+     Text, borders, surfaces. Deliberately warm rather than the
+     usual cool grey, and that choice matters more now the brand
+     is indigo: cool neutrals plus a cool accent gives you the
+     sterile blue-on-grey look every enterprise dashboard has.
+     A warm grey underneath keeps the page feeling like a
+     classroom rather than an admin console — and it's the
+     difference most people feel without being able to name.
+     --------------------------------------------------------- */
+  --color-ink-50: #fafaf9;
+  --color-ink-100: #f5f5f4;
+  --color-ink-200: #e7e5e4;
+  --color-ink-300: #d6d3d1;
+  --color-ink-400: #a8a29e;
+  --color-ink-500: #78716c;
+  --color-ink-600: #57534e;
+  --color-ink-700: #44403c;
+  --color-ink-800: #292524;
+  --color-ink-900: #1c1917;
+  --color-ink-950: #0c0a09;
+
+  /* ---------------------------------------------------------
+     STATUS
+     ---------------------------------------------------------
+     These carry meaning about STUDENTS, never about buttons.
+     Green = doing fine. Amber = falling behind. Red = needs
+     you now. Blue = neutral information.
+
+     Keeping status colours separate from the brand colour is
+     what lets a teacher scan a class list and instantly see
+     who needs help.
+     --------------------------------------------------------- */
+  /* ---- THE GAPS IN THESE SCALES WERE A SILENT BUG ----
+     Each of these used to run 50, 100, 500, 600, 700 and
+     nothing else, because those were the five shades the first
+     screens happened to need. Tailwind v4 does not warn about
+     the gaps: `border-watch-300` on a scale with no 300 emits NO
+     CSS AT ALL. The class is simply dropped and the element
+     keeps whatever it would have had — so the "needs action"
+     card rendered with a default grey border and inherited grey
+     text instead of the amber border and amber-800 text it was
+     written to have, and it looked washed out for a reason
+     nothing in the markup could explain.
+
+     This is the worst shape a styling bug can take: the code
+     reads as correct, the browser reports no error, and the only
+     symptom is that the design looks slightly wrong. So the
+     scales are now filled in to 200, 300 and 800 across the
+     board, whether or not a screen uses them today — a palette
+     with holes in it is a trap for whoever reaches for the
+     missing shade next.
+
+     ---- AND 400 EXISTS FOR THE BAND BARS ----
+     Three saturated hues side by side on one card read louder
+     than one saturated hue does, which is why the Reports grid
+     felt heavy next to Classes while using the same weights.
+     500 stays the colour of a signal that has to be noticed —
+     a score, an alert. 400 is for a bar whose LENGTH is the
+     message and whose colour only has to say which band it is. */
+  --color-good-50: #f0fdf4;
+  --color-good-100: #dcfce7;
+  --color-good-200: #bbf7d0;
+  --color-good-300: #86efac;
+  --color-good-400: #4ade80;
+  --color-good-500: #22c55e;
+  --color-good-600: #16a34a;
+  --color-good-700: #15803d;
+  --color-good-800: #166534;
+
+  --color-watch-50: #fffbeb;
+  --color-watch-100: #fef3c7;
+  --color-watch-200: #fde68a;
+  --color-watch-300: #fcd34d;
+  --color-watch-400: #fbbf24;
+  --color-watch-500: #f59e0b;
+  --color-watch-600: #d97706;
+  --color-watch-700: #b45309;
+  --color-watch-800: #92400e;
+
+  --color-alert-50: #fef2f2;
+  --color-alert-100: #fee2e2;
+  --color-alert-200: #fecaca;
+  --color-alert-300: #fca5a5;
+  --color-alert-400: #f87171;
+  --color-alert-500: #ef4444;
+  --color-alert-600: #dc2626;
+  --color-alert-700: #b91c1c;
+  --color-alert-800: #991b1b;
+
+  --color-info-50: #eff6ff;
+  --color-info-100: #dbeafe;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+  --color-info-700: #1d4ed8;
+
+  /* ---------------------------------------------------------
+     RADIUS
+     Two values only. More than two and the UI stops feeling
+     like one object.
+     --------------------------------------------------------- */
+  --radius-card: 0.875rem;
+  --radius-control: 0.5rem;
+
+  /* ---------------------------------------------------------
+     PAGE WIDTH
+     ONE number, for every screen. Dhinesh caught the header
+     sitting at one width and Today's content at another, and
+     he's right that it reads as sloppiness rather than as a
+     decision — the logo and the nav are a fixed edge, and when
+     the content below them doesn't line up with that edge the
+     whole page looks slightly out of register.
+
+     It's written as a token rather than typed into each screen
+     so there is exactly one place to change it, and so no
+     screen can quietly drift to its own width again.
+     Tailwind turns this into the class `max-w-page`.
+     --------------------------------------------------------- */
+  --container-page: 1400px;
+
+  /* ---------------------------------------------------------
+     THE PAGE BEHIND EVERYTHING
+     A separate token from the neutrals, so the surface can be
+     changed in one place without disturbing the dozen other
+     things that use ink-50 — hover states, card footers, the
+     inset strip under a lesson card. Those should stay a shade
+     off white whatever the page does, because their job is to
+     sit quietly against a WHITE CARD, not against the page.
+
+     Default is the warm stone #fafaf9. Switching it to pure
+     white is a real decision rather than a preference, and the
+     Prototype panel has both so it can be settled by looking:
+
+       SOFT   cards read as objects lifted off the page, because
+              there is a value difference between them and the
+              background. Nothing has to be outlined.
+       WHITE  cleaner and brighter, but cards now share a fill
+              with the page, so their edges have to do all the
+              work — every boundary becomes a line rather than a
+              change in tone. More lines is more visual noise on
+              a dense screen, which is the trade.
+     --------------------------------------------------------- */
+  --color-page: #fafaf9;
+
+  /* ---------------------------------------------------------
+     ELEVATION
+     Restrained on purpose. Depth comes from borders and
+     whitespace. Heavy drop shadows are what make software
+     look like 2015.
+     --------------------------------------------------------- */
+  /* ---- A RAMP, NOT A BLUR ----
+     The old card shadow was two stops and almost invisible —
+     written when I was defending against the heavy single
+     drop shadow that makes software look like 2015. The
+     defence was right and the conclusion was wrong: the
+     alternative to one big blur is not no shadow, it is SEVERAL
+     SMALL ONES.
+
+     Each layer here doubles the blur and the negative spread of
+     the one before it, at roughly equal alpha. Light does not
+     fall off in one step, and stacking stops this way
+     approximates the real curve — dense right under the card
+     where it meets the page, dissolving as it travels. That is
+     what separates a card that looks lit from a card with a
+     grey rectangle behind it, and it is the single biggest
+     thing that dates an interface.
+
+     Warm, not black. The shadow colour is the ink ramp's own
+     stone (28 25 23), so it sits under a warm page without the
+     blue-grey cast pure black leaves. */
+  --shadow-card: 0 1px 1px -0.5px rgb(28 25 23 / 0.05),
+    0 2px 2px -1px rgb(28 25 23 / 0.05),
+    0 5px 5px -2.5px rgb(28 25 23 / 0.05),
+    0 10px 10px -5px rgb(28 25 23 / 0.04);
+
+  /* ---- AND THE LIFT CARRIES A LITTLE BRAND ----
+     The last layer is indigo rather than stone, at an alpha low
+     enough that nobody will name it. On a light interface a
+     coloured GLOW reads as a smudge — that idiom belongs to
+     dark UI, where light sources make sense. What does work is
+     tinting the widest, faintest layer of an ordinary shadow:
+     the card appears to sit on something warm rather than on
+     grey, and the eye reads expensive without being able to say
+     why. Only on hover, so it is a reward for reaching rather
+     than a permanent decoration. */
+  --shadow-raised: 0 1px 1px -0.5px rgb(28 25 23 / 0.06),
+    0 3px 3px -1.5px rgb(28 25 23 / 0.06),
+    0 8px 8px -4px rgb(28 25 23 / 0.06),
+    0 16px 16px -8px rgb(28 25 23 / 0.06),
+    0 28px 44px -16px rgb(67 56 202 / 0.12);
+  --shadow-overlay: 0 8px 12px -4px rgb(28 25 23 / 0.08),
+    0 24px 48px -12px rgb(28 25 23 / 0.18);
+
+  /* ---- The playlist tray gets its own elevation ----
+     It used --shadow-overlay, borrowed from the dialogs and
+     dropdowns, and on a page of white cards it was not enough
+     to separate it from what it floats over.
+
+     IT IS A DIFFERENT KIND OF OBJECT, which is why it needed
+     its own token rather than a deeper shared one. Every other
+     overlay in the product is temporary and arrives over a
+     scrim or an obviously frozen page; the tray is permanent,
+     unscrimmed, and sits on top of live content the teacher is
+     still reading and scrolling. Deepening --shadow-overlay to
+     fix the tray would have made every dropdown and date
+     picker heavier to solve a problem only the tray has.
+
+     THE LIGHT GOES UP. A bottom-docked bar only meets page
+     content along its TOP edge — its sides and bottom meet the
+     page gutter and the screen edge, where a downward shadow
+     falls off and is simply wasted. So the budget is spent on
+     an upward layer that lifts the top edge away from whatever
+     is running underneath it, plus a wide ambient pool at
+     roughly 1.6× the old opacity for the overall sense of
+     height. The tight contact layer stays: without it a big
+     soft shadow reads as fog rather than as an object. */
+  --shadow-tray: 0 -4px 12px -4px rgb(28 25 23 / 0.10),
+    0 2px 6px -1px rgb(28 25 23 / 0.10),
+    0 20px 52px -12px rgb(28 25 23 / 0.30);
+}
+
+/* ============================================================
+   ALTERNATE PALETTES
+   ------------------------------------------------------------
+   The brand ramp above is the default. These override it when
+   the root element carries data-palette="...".
+
+   This is why a design system is worth the setup cost: the
+   whole product re-skins from these blocks, and not one screen
+   file has to change. Picking a brand colour becomes a
+   five-second decision you can make by looking, rather than an
+   argument you have in the abstract.
+   ============================================================ */
+
+/* Deep royal blue — the confident, institutional choice.
+   Reads as trustworthy. Also the most crowded space in ed-tech,
+   so it will look like software a district already owns. That
+   familiarity is a real advantage internally and a real
+   disadvantage in a bake-off. */
+:root[data-palette="blue"] {
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #dce7ff;
+  --color-brand-200: #bdd0ff;
+  --color-brand-300: #93b0ff;
+  --color-brand-400: #6688fb;
+  --color-brand-500: #4362f0;
+  --color-brand-600: #2e44dc;
+  --color-brand-700: #2634b4;
+  --color-brand-800: #242f92;
+  --color-brand-900: #232d73;
+  --color-brand-950: #171c45;
+}
+
+/* Deep teal — the first proposal, kept as a comparison. Most
+   distinctive of the four; nobody else in ed-tech owns it. */
+:root[data-palette="teal"] {
+  --color-brand-50: #f0fdfa;
+  --color-brand-100: #daf5f0;
+  --color-brand-200: #b2e9e0;
+  --color-brand-300: #7fd6c9;
+  --color-brand-400: #46baab;
+  --color-brand-500: #1e9b8d;
+  --color-brand-600: #127d73;
+  --color-brand-700: #10645d;
+  --color-brand-800: #12504b;
+  --color-brand-900: #13433f;
+  --color-brand-950: #052e2b;
+}
+
+/* Violet — the most distinctive of the four. Energetic, reads
+   younger. Furthest from what EduSmart looks like today, which
+   cuts both ways in a room full of stakeholders. */
+:root[data-palette="violet"] {
+  --color-brand-50: #f5f3ff;
+  --color-brand-100: #ede9fe;
+  --color-brand-200: #ddd6fe;
+  --color-brand-300: #c4b5fd;
+  --color-brand-400: #a78bfa;
+  --color-brand-500: #8b5cf6;
+  --color-brand-600: #7c3aed;
+  --color-brand-700: #6d28d9;
+  --color-brand-800: #5b21b6;
+  --color-brand-900: #4c1d95;
+  --color-brand-950: #2e1065;
+}
+
+/* All four are checked against white text at 600 and against
+   white backgrounds at 700, so every one of them passes WCAG AA
+   before you pick. Contrast isn't a taste question — it's a
+   procurement requirement — so it's settled up front rather
+   than discovered late. */
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   THE TYPE SCALE
+   ------------------------------------------------------------
+   12 · 14 · 16 · 18 · 20 · 24. Six steps, every one even, and
+   nothing below 12.
+
+   It used to be 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 24 —
+   eleven steps, most of them one pixel apart. Two problems with
+   that, and the second is the worse one.
+
+   THE FLOOR. Words were being set at 10px ("average",
+   "struggling", "taught throughout") and initials at 9px. These
+   users are teachers reading a laptop across a classroom, often
+   glancing at it mid-sentence while talking to thirty children.
+   10px is a size you lean in for, and she cannot lean in.
+
+   THE STEPS. A one-pixel difference is not a distinction — it
+   is indistinguishable at a glance, so it did no work, while
+   still forcing a decision every time something new was built
+   ("is this 12 or 13?"). Eleven sizes that read as four is
+   worse than four sizes that read as four.
+
+   So 10, 11 and 12 collapsed into 12, and 13 joined 14. That
+   loses two tiers of hierarchy on paper and almost none in
+   practice, because the design was never carrying hierarchy
+   with size at that end of the scale — it was carrying it with
+   WEIGHT and COLOUR, which survive at any size. A 12px
+   ink-400 label and a 12px ink-900 semibold one are still
+   obviously different things.
+
+   Sizes are in px rather than rem. That is the honest
+   trade-off for a dense data product: it holds the layout
+   steady, it scales correctly under browser zoom (which is what
+   WCAG 1.4.4 actually asks for), and it ignores a user's
+   default-font-size setting, which it shouldn't. Worth
+   revisiting if the product ever gets an accessibility audit.
+   ------------------------------------------------------------ */
+
+html {
+  -webkit-text-size-adjust: 100%;
+
+  /* THE SECOND HALF OF THE WIDTH PROBLEM, and the sneakier one.
+     On Windows the scrollbar is a solid 15px strip that takes
+     space away from the page, rather than floating over it the
+     way it does on a Mac. So a tall page (Everything, 11
+     resources) has a scrollbar and a short one (Anchoring
+     Phenomenon, 1 resource) doesn't — and the entire layout
+     jumps sideways by 15px the instant you switch between them.
+
+     `scrollbar-gutter: stable` reserves that strip permanently,
+     whether or not the page currently scrolls. Nothing moves
+     any more. This is why the jump was invisible in my
+     screenshots and obvious on his machine: the test browser
+     draws Mac-style overlay scrollbars. */
+  scrollbar-gutter: stable;
+}
+
+body {
+  @apply bg-page text-ink-900 font-sans antialiased;
+}
+
+/* ---- The white-surface variant ----
+   Two changes, not one. Making the page white without the
+   second line is the mistake: white cards on a white page
+   dissolve, and the layout stops reading as a set of objects.
+
+   So the card border darkens a step to carry the boundary that
+   the value difference used to carry for free. This is the
+   trade stated in the token above, made concrete — the design
+   doesn't get simpler on white, it just moves the work from
+   tone to line. */
+/* ============================================================
+   BRAND-TINTED SHADOWS — the other version
+   ------------------------------------------------------------
+   The resting shadow is warm stone: the ink ramp's own colour,
+   so a card sits on the page without a cast. This variant
+   replaces that grey with indigo at the same alphas.
+
+   The case FOR it: a shadow is light that has been blocked, and
+   the colour of the surface it lands on tints what is left.
+   Pages are rarely neutral and interfaces that pick a hue for
+   their shadows tend to read as considered rather than
+   defaulted. It also ties the elevation to the brand without
+   putting any more indigo on the page as ink.
+
+   The case AGAINST it: indigo shadows on twelve white cards
+   make the page read slightly cool and slightly purple, and on
+   a product whose palette already runs warm — stone page, amber
+   and red bands — that cast fights the content rather than
+   sitting under it. A shadow is supposed to be the one thing
+   nobody looks at.
+
+   Both are defensible, which is why this is a switch rather
+   than a decision I made for him. Same geometry, same alphas,
+   one variable changed: 28 25 23 becomes 67 56 202.
+   ============================================================ */
+:root[data-shadow='brand'] {
+  /* ---- A TINT HAS TO BE ABLE TO SURVIVE BEING A SHADOW ----
+     First pass used indigo-700 at the stone's own alphas — 7%
+     of #4338ca — and Dhinesh could not see the difference.
+     He was right, and the reason is that a dark, low-chroma
+     indigo at 7% on white is arithmetically almost the same
+     grey the neutral version already was. The hue was there and
+     had nothing to show it with.
+
+     Two changes. The colour moves up the ramp to indigo-500
+     (#6366f1), which is brighter and far more saturated, so
+     each percent of alpha carries more hue. And the alphas
+     roughly double, because a tint that is only perceptible
+     when you look for it is not a variant, it is a rounding
+     error.
+
+     The wide layers take the most of it. A coloured shadow
+     reads as a cast when the colour lives in the soft outer
+     pool and as a coloured outline when it lives in the tight
+     contact layer — the first is the effect he is asking about,
+     the second is a mistake. */
+  --shadow-card: 0 1px 1px -0.5px rgb(99 102 241 / 0.10),
+    0 2px 2px -1px rgb(99 102 241 / 0.11), 0 5px 5px -2.5px rgb(99 102 241 / 0.13),
+    0 10px 12px -5px rgb(99 102 241 / 0.15);
+  --shadow-raised: 0 1px 1px -0.5px rgb(99 102 241 / 0.12),
+    0 3px 3px -1.5px rgb(99 102 241 / 0.13), 0 8px 8px -4px rgb(99 102 241 / 0.16),
+    0 16px 18px -8px rgb(99 102 241 / 0.20), 0 28px 48px -16px rgb(99 102 241 / 0.30);
+  --shadow-overlay: 0 8px 12px -4px rgb(99 102 241 / 0.16),
+    0 24px 48px -12px rgb(99 102 241 / 0.34);
+  --shadow-tray: 0 -4px 12px -4px rgb(99 102 241 / 0.18),
+    0 -16px 32px -12px rgb(99 102 241 / 0.24);
+}
+
+/* ---- WHY THE BLOCK ABOVE WASN'T ENOUGH ----
+   Dhinesh switched to Brand twice and said he couldn't see any
+   difference at all. He was right both times, and the reason had
+   nothing to do with how strong the tint was.
+
+   Tailwind v4 BAKES the shadow value at build time. Writing
+   `shadow-card` in a component doesn't compile to
+   `box-shadow: var(--shadow-card)` — it compiles to a literal:
+
+     .shadow-card { --tw-shadow: 0 1px 1px -.5px #1c19170d, … }
+
+   The finished stylesheet no longer mentions `--shadow-card` at
+   all. So redefining that variable at runtime changes the
+   variable and nothing else: I verified the attribute flipped,
+   verified the variable flipped, and both were true and both
+   were beside the point, because no card was reading it. The
+   lesson is the same one the stale-memo bug taught — verify the
+   layer the person actually looks at, which here is the computed
+   `box-shadow` on a card, not the custom property behind it.
+
+   So the switch has to reach `--tw-shadow`, the variable the
+   compiled utility does read. Setting that rather than
+   `box-shadow` outright matters: the real declaration is
+
+     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow),
+                 var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+                 var(--tw-shadow)
+
+   and the focus ring on a card rides in that same chain. A
+   blanket `box-shadow` override would silently delete it.
+   Replacing one link leaves the rest intact.
+
+   These rules sit outside any `@layer`, and Tailwind's utilities
+   sit inside `@layer utilities`. Unlayered styles beat layered
+   ones whatever the specificity, so this wins without a single
+   `!important`.
+
+   (The variable block above still earns its place: `glass-panel`
+   reads `var(--shadow-overlay)` directly, the ordinary way, and
+   picks up the tint from there.) */
+:root[data-shadow='brand'] .shadow-card,
+:root[data-shadow='brand'] .hover\:shadow-card:hover {
+  --tw-shadow: var(--shadow-card);
+}
+:root[data-shadow='brand'] .shadow-raised,
+:root[data-shadow='brand'] .hover\:shadow-raised:hover {
+  --tw-shadow: var(--shadow-raised);
+}
+:root[data-shadow='brand'] .shadow-overlay {
+  --tw-shadow: var(--shadow-overlay);
+}
+:root[data-shadow='brand'] .shadow-tray {
+  --tw-shadow: var(--shadow-tray);
+}
+
+:root[data-surface='white'] {
+  --color-page: #ffffff;
+  --color-ink-200: #e3e0dc;
+}
+
+/* Every interactive element gets a visible keyboard focus ring.
+   Non-negotiable: public-school software has to pass WCAG, and
+   teachers genuinely do tab through forms. */
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-brand-600;
+}
+
+/* ---- Except text fields, where the ring goes INSIDE ----
+   A halo floating two pixels off a search bar reads as a second
+   rectangle around the first — Dhinesh spotted it and he's
+   right, it looks like a stray element rather than a state.
+
+   A negative offset draws the same outline just inside the
+   field's own edge, so what you see is the grey border turning
+   indigo and thickening. Same pixels, one rectangle.
+
+   Note this KEEPS the outline rather than replacing it with a
+   border colour change. That matters: a 1px border going from
+   grey to indigo is a weak focus indicator and WCAG 2.2 wants
+   a real one. This is 2px of brand-600, which sits at about
+   6.6:1 against both the white field and the page behind it —
+   comfortably past the 3:1 a focus indicator needs.
+
+   Buttons keep the outside ring, which is correct for them: on
+   a filled control an inset ring would be swallowed by the
+   fill. */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-offset: -1px;
+}
+
+/* Tabular figures keep score columns from jittering as numbers
+   change width. A small thing that makes data feel solid. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hide scrollbars on horizontal scrollers without losing the
+   ability to scroll. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   GLASS — ON THE FLOATING LAYER ONLY
+   ------------------------------------------------------------
+   Dhinesh asked for "10 to 20% glassy" across the UI. The
+   percentage is the easy part; WHERE is the decision.
+
+   Glass only reads as glass when something is moving behind
+   it. A card sitting in a grid on a flat page has nothing to
+   refract — making it translucent does not look like glass, it
+   looks like the card has lost contrast, and the text inside it
+   gets harder to read for no gain. So the effect goes on the
+   FLOATING layer: the things that genuinely sit above content
+   and have content sliding under them. The header while the
+   page scrolls. A dialog over the screen it came from. The
+   playlist tray over the Library. A menu over a row. A sticky
+   table head over its own rows.
+
+   Content surfaces — cards, table rows, the page itself — stay
+   opaque. That is not a compromise; it is the thing that makes
+   the floating layer legible AS floating.
+
+   86% tint is the 14% he asked for. Saturate lifts the colour
+   that the blur washes out, which is the difference between
+   frosted glass and fog. The border highlight is what sells it:
+   real glass has a bright edge where it catches light.
+
+   WCAG is why the tint is this high and not lower. Text sits on
+   these surfaces — nav labels, dialog body copy, menu items —
+   and contrast has to survive whatever happens to scroll
+   underneath. A dark photo passing under a 60% panel takes the
+   text with it.
+   ============================================================ */
+@utility glass {
+  /* 92%, and the blur does the rest. The tint number is not
+     the glassiness: a 92% surface with an 18px blur behind it
+     reads as frosted, while the same tint flat reads as a
+     slightly grey bar. The header has LIVE content sliding
+     directly under it with no scrim in between, which is why it
+     is the most opaque of the three — nav labels have to stay
+     crisp over whatever happens to pass beneath them. */
+  background-color: color-mix(in oklab, var(--color-page) 92%, transparent);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+}
+
+/* The same glass, tinted white rather than page-coloured, for
+   dialogs and menus that should read as a sheet of material
+   rather than as a lighter patch of the page. */
+@utility glass-panel {
+  /* Can afford to be thinner than the header, because a dialog
+     has the scrim beneath it already muting the page — the
+     thing it is letting through has been quietened once
+     before it arrives. */
+  background-color: color-mix(in oklab, white 90%, transparent);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.6),
+    var(--shadow-overlay);
+}
+
+/* The scrim behind a dialog. Blurring the page rather than only
+   darkening it is what makes the dialog feel like it is in
+   front of something, and it does the accessibility job too:
+   the text underneath stops competing for the eye. */
+@utility glass-scrim {
+  background-color: rgb(12 10 9 / 0.32);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ---- WHERE IT IS NOT SUPPORTED, IT IS NOT TRANSLUCENT ----
+   Safari has had backdrop-filter for years and Firefox enables
+   it by default now, but a browser without it would render
+   these surfaces as flat 86% white over live content, which is
+   unreadable rather than merely plain. The fallback is full
+   opacity: no glass, no problem. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .glass-panel {
+    background-color: var(--color-page);
+  }
+  .glass-panel {
+    background-color: #ffffff;
+  }
+  .glass-scrim {
+    background-color: rgb(12 10 9 / 0.5);
+  }
+}
