@@ -2607,7 +2607,14 @@ function AssignmentCard({
         onClick={onShowClasses}
         className="mt-auto flex w-full flex-wrap items-center gap-2 rounded-control border border-brand-600 bg-brand-600 px-3 py-2 text-left transition-colors hover:border-brand-700 hover:bg-brand-700"
       >
-        <span className="min-w-0 flex-1 truncate text-[13px] text-white/75">
+        {/* Full white throughout. The 75% on "Assigned to" was
+            meant to keep the frame behind the figures, but at
+            13px on a saturated fill it read as text that had
+            failed to load rather than text deliberately set
+            back. Weight carries the hierarchy on its own here —
+            the numbers are semibold and the words around them
+            are not, which is enough at this size. */}
+        <span className="min-w-0 flex-1 truncate text-[13px] text-white">
           Assigned to{' '}
           <span className="font-semibold text-white">
             {a.classIds.length} {a.classIds.length === 1 ? 'class' : 'classes'}
@@ -2617,7 +2624,22 @@ function AssignmentCard({
         {waiting > 0 && (
           <span
             title={`${waiting} ${waiting === 1 ? 'student is' : 'students are'} waiting to be assigned`}
-            className="shrink-0 rounded-full bg-alert-100 px-2 py-0.5 text-[12px] font-medium text-alert-800"
+            /* ---- THE CHIP INVERTS ON A SOLID BAND ----
+               Pale red on pale red worked while the band was a
+               tint. On saturated indigo it became a muddy pink
+               smudge: alert-100 is only a few steps off the
+               indigo in value, so the chip lost its edges and the
+               one thing on the card asking for attention stopped
+               looking like a thing at all.
+
+               White fill with red text is the strongest pairing
+               available here and the only one that does not
+               depend on the band's colour — it would still read
+               if the band were green. The red stays the
+               product's own alert hue rather than a new one, so
+               the chip means the same thing it means everywhere
+               else. */
+            className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[12px] font-semibold text-alert-700"
           >
             Needs action
             <span className="sr-only">
