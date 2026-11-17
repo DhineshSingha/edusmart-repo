@@ -37,8 +37,8 @@
    ============================================================ */
 
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { ChevronRight } from 'lucide-react'
+import { Link, useParams, useNavigate } from 'react-router-dom'
+import { ArrowLeft, ChevronRight } from 'lucide-react'
 import {
   getStandard,
   resourcesForStandard,
@@ -76,6 +76,7 @@ const accent = (i) =>
 export default function StandardDetail() {
   const { standardId } = useParams()
   const std = getStandard(standardId)
+  const navigate = useNavigate()
 
   const [axis, setAxis] = useState('type')
   const [openGroup, setOpenGroup] = useState(null)
@@ -125,46 +126,125 @@ export default function StandardDetail() {
     setOpenKind(kind ?? null)
   }
 
+  /* The back arrow goes back exactly ONE level, which is the same
+     move the crumb to its left makes. Two controls sitting beside
+     each other that look like they do the same thing should do
+     the same thing; an arrow that jumped straight out to the
+     Library from three levels in would be a different control
+     wearing the same icon.
+
+     At the top of a standard there is no level above it on this
+     screen, so the arrow leaves the page and returns to the
+     Library. That is the only case where it changes the URL. */
+  const backLabel = openKind
+    ? `Back to ${openGroup}`
+    : openGroup
+      ? `Back to ${std.id}`
+      : 'Back to Library'
+
+  function goBack() {
+    if (openKind) {
+      setOpenKind(null)
+      return
+    }
+    if (openGroup) {
+      setOpenGroup(null)
+      setOpenKind(null)
+      return
+    }
+    navigate('/teach')
+  }
+
   return (
     <div className="space-y-6">
       {/* ---- Header ---- */}
       <header>
-        <nav className="flex flex-wrap items-center gap-1.5 text-[14px] text-ink-500">
-          <Link to="/teach" className="hover:text-ink-800">
-            Library
-          </Link>
-          <ChevronRight className="h-3.5 w-3.5 text-ink-300" />
-          {openGroup ? (
-            <>
-              <button
-                onClick={() => {
-                  setOpenGroup(null)
-                  setOpenKind(null)
-                }}
-                className="hover:text-ink-800"
-              >
-                {std.id}
-              </button>
-              <ChevronRight className="h-3.5 w-3.5 text-ink-300" />
-              {openKind ? (
-                <>
-                  <button
-                    onClick={() => setOpenKind(null)}
-                    className="hover:text-ink-800"
-                  >
+        {/* ---- Back arrow, then the trail ----
+            Three changes here, all asked for together:
+
+            1. An ARROW in front of the trail. The crumbs were
+               already clickable, but a trail is something you
+               read; an arrow is something you press. People who
+               never noticed the crumbs were links had no visible
+               way back on this screen other than the browser's
+               own button, which is outside the product.
+
+            2. The crumb you are STANDING ON is brand-coloured.
+               Throughout this prototype brand colour marks what
+               you can act on and what you have currently chosen —
+               this is the second of those two jobs.
+
+            3. The crumbs BEHIND you are flat black. They used to
+               be ink-500 grey. With the last crumb in colour, a
+               grey trail read as disabled text with one live item
+               in it — exactly backwards, because the grey ones are
+               the ones you can click and the coloured one is where
+               you already are. Black says every one of them is a
+               real place. "100% black" is literal (#000), not the
+               warm near-black ink-900 (#1c1917); the two are
+               distinguishable side by side and black is what was
+               asked for.
+
+            Because the links are now black rather than a lighter
+            grey, hover can no longer darken them. It underlines
+            instead — same promise, different signal. */}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={goBack}
+            aria-label={backLabel}
+            title={backLabel}
+            className="-ml-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-control text-ink-600 transition-colors hover:bg-ink-100 hover:text-black"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+
+          <nav
+            aria-label="Breadcrumb"
+            className="flex flex-wrap items-center gap-1.5 text-[14px]"
+          >
+            <Link to="/teach" className="text-black hover:underline">
+              Library
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5 text-ink-300" />
+            {openGroup ? (
+              <>
+                <button
+                  onClick={() => {
+                    setOpenGroup(null)
+                    setOpenKind(null)
+                  }}
+                  className="text-black hover:underline"
+                >
+                  {std.id}
+                </button>
+                <ChevronRight className="h-3.5 w-3.5 text-ink-300" />
+                {openKind ? (
+                  <>
+                    <button
+                      onClick={() => setOpenKind(null)}
+                      className="text-black hover:underline"
+                    >
+                      {openGroup}
+                    </button>
+                    <ChevronRight className="h-3.5 w-3.5 text-ink-300" />
+                    <span aria-current="page" className="font-medium text-brand-700">
+                      {openKind}
+                    </span>
+                  </>
+                ) : (
+                  <span aria-current="page" className="font-medium text-brand-700">
                     {openGroup}
-                  </button>
-                  <ChevronRight className="h-3.5 w-3.5 text-ink-300" />
-                  <span className="font-medium text-ink-800">{openKind}</span>
-                </>
-              ) : (
-                <span className="font-medium text-ink-800">{openGroup}</span>
-              )}
-            </>
-          ) : (
-            <span className="font-medium text-ink-800">{std.id}</span>
-          )}
-        </nav>
+                  </span>
+                )}
+              </>
+            ) : (
+              <span aria-current="page" className="font-medium text-brand-700">
+                {std.id}
+              </span>
+            )}
+          </nav>
+        </div>
 
         <div className="mt-3 max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
