@@ -187,7 +187,13 @@ export default function StandardDetail() {
 
             Because the links are now black rather than a lighter
             grey, hover can no longer darken them. It underlines
-            instead — same promise, different signal. */}
+            instead — same promise, different signal.
+
+            The current crumb is BOLD as well as coloured. Colour
+            alone is a single channel, and a single channel fails
+            for anyone who cannot separate indigo from black, and
+            fails again on a projector. Weight says the same thing
+            a second way, which costs nothing. */}
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -228,18 +234,18 @@ export default function StandardDetail() {
                       {openGroup}
                     </button>
                     <ChevronRight className="h-3.5 w-3.5 text-ink-300" />
-                    <span aria-current="page" className="font-medium text-brand-700">
+                    <span aria-current="page" className="font-bold text-brand-700">
                       {openKind}
                     </span>
                   </>
                 ) : (
-                  <span aria-current="page" className="font-medium text-brand-700">
+                  <span aria-current="page" className="font-bold text-brand-700">
                     {openGroup}
                   </span>
                 )}
               </>
             ) : (
-              <span aria-current="page" className="font-medium text-brand-700">
+              <span aria-current="page" className="font-bold text-brand-700">
                 {std.id}
               </span>
             )}
